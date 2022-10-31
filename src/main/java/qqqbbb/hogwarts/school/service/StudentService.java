@@ -1,9 +1,12 @@
 package qqqbbb.hogwarts.school.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import qqqbbb.hogwarts.school.model.Student;
 import qqqbbb.hogwarts.school.repository.StudentRepository;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService
@@ -22,7 +25,7 @@ public class StudentService
 
     public Student getStudent(long id)
     {
-        return repository.findById(id).get();
+        return repository.findById(id).orElseThrow();
     }
 
     public Student editStudent(Student student)
@@ -38,5 +41,10 @@ public class StudentService
     public Collection<Student> getAllStudents()
     {
         return repository.findAll();
+    }
+
+    public List<Student> getStudentsByAge(int age)
+    {
+        return repository.findAll().stream().filter(s -> s.getAge() == age).collect(Collectors.toList());
     }
 }

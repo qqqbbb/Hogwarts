@@ -19,33 +19,21 @@ public class StudentController
     }
 
     @PostMapping
-    public ResponseEntity addStudent(@RequestBody Student studentToAdd)
+    public ResponseEntity addStudent(@RequestBody Student student)
     {
-        Student student = studentService.addStudent(studentToAdd);
-        if (student == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentService.addStudent(student));
     }
 
     @GetMapping("{id}")
     public ResponseEntity getStudent(@PathVariable long id)
     {
-        Student student = studentService.getStudent(id);
-        if (student == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentService.getStudent(id));
     }
 
     @PutMapping
-    public ResponseEntity editStudent(@RequestBody Student studentToEdit)
+    public ResponseEntity editStudent(@RequestBody Student student)
     {
-        Student student = studentService.editStudent(studentToEdit);
-        if (student == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok( studentService.editStudent(student));
     }
 
     @DeleteMapping("{id}")
@@ -56,9 +44,9 @@ public class StudentController
     }
 
     @GetMapping("/age/{age}")
-    public ResponseEntity getStudentsByAge(@PathVariable long age)
+    public ResponseEntity getStudentsByAge(@PathVariable int age)
     {
-        List<Student> students = studentService.getAllStudents().stream().filter(s -> s.getAge() == age).collect(Collectors.toList());
+        List<Student> students = studentService.getStudentsByAge(age);
         return ResponseEntity.ok(students);
     }
 

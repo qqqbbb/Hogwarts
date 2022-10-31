@@ -19,33 +19,21 @@ public class HouseController
     }
 
     @PostMapping
-    public ResponseEntity addHouse(@RequestBody House houseToAdd)
+    public ResponseEntity addHouse(@RequestBody House house)
     {
-        House house = houseService.addHouse(houseToAdd);
-        if (house == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(house);
+        return ResponseEntity.ok(houseService.addHouse(house));
     }
 
     @GetMapping("{id}")
     public ResponseEntity getHouse(@PathVariable Long id)
     {
-        House house = houseService.getHouse(id);
-        if (house == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(house);
+        return ResponseEntity.ok(houseService.getHouse(id));
     }
 
     @PutMapping
-    public ResponseEntity editHouse(@RequestBody House houseToEdit)
+    public ResponseEntity editHouse(@RequestBody House house)
     {
-        House house = houseService.editHouse(houseToEdit);
-        if (house == null)
-            return ResponseEntity.notFound().build();
-
-        return ResponseEntity.ok(house);
+        return ResponseEntity.ok(houseService.editHouse(house));
     }
 
     @DeleteMapping("{id}")
@@ -58,7 +46,7 @@ public class HouseController
     @GetMapping("/color/{color}")
     public ResponseEntity getHousesByColor(@PathVariable String color)
     {
-        List<House> houses = houseService.getAllHouses().stream().filter(h -> h.getColor().equals(color)).collect(Collectors.toList());
+        List<House> houses = houseService.getHousesByColor(color);
         return ResponseEntity.ok(houses);
     }
 
