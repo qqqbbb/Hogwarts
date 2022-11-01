@@ -7,10 +7,14 @@ import java.util.Objects;
 public class Student
 {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "house_id")
+    private House house;
 
     @Override
     public boolean equals(Object o)

@@ -57,4 +57,10 @@ public class HouseController
         return ResponseEntity.ok(houses);
     }
 
+    @GetMapping("/colorOrName/{var}")
+    public ResponseEntity getHousesByColorOrName(@RequestParam(required = false) String color, @RequestParam(required = false) String name)
+    {
+        Collection<House> houses = houseService.getHousesByColorOrName(color, name);
+        return ResponseEntity.ok(houses);
+    }
 }

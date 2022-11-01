@@ -1,8 +1,7 @@
 package qqqbbb.hogwarts.school.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+import qqqbbb.hogwarts.school.Exception.*;
 import qqqbbb.hogwarts.school.model.Student;
 import qqqbbb.hogwarts.school.repository.StudentRepository;
 import java.util.*;
@@ -25,7 +24,7 @@ public class StudentService
 
     public Student getStudent(long id)
     {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(StudentNotFoundException::new);
     }
 
     public Student editStudent(Student student)
@@ -47,4 +46,10 @@ public class StudentService
     {
         return repository.findAll().stream().filter(s -> s.getAge() == age).collect(Collectors.toList());
     }
+
+    public Collection<Student> findByAgeBetween(int ageMin, int ageMax)
+    {
+        return repository.findByAgeBetween(ageMin, ageMax);
+    }
+
 }

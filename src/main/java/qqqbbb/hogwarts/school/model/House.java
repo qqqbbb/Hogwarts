@@ -2,15 +2,19 @@ package qqqbbb.hogwarts.school.model;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class House
 {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String color;
+
+    @OneToMany(mappedBy = "house")
+    private Set<Student> students;
 
     @Override
     public boolean equals(Object o)
