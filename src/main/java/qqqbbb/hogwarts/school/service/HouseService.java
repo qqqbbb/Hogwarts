@@ -1,8 +1,8 @@
 package qqqbbb.hogwarts.school.service;
 
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
+import qqqbbb.hogwarts.school.Exception.*;
 import qqqbbb.hogwarts.school.model.House;
 import qqqbbb.hogwarts.school.repository.HouseRepository;
 import java.util.*;
@@ -25,7 +25,7 @@ public class HouseService
 
     public House getHouse(long id)
     {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(HouseNotFoundException::new);
     }
 
     public House editHouse(House house)
@@ -46,5 +46,13 @@ public class HouseService
     public  List<House> getHousesByColor(String color)
     {
         return repository.findAll().stream().filter(h -> h.getColor().equals(color)).collect(Collectors.toList());
+    }
+
+    public  Collection<House> getHousesByColorOrName(String color, String name)
+    {
+        if (StringUtils.isBlank(color) && StringUtils.isBlank(name))
+            throw new IllegalArgumentException();
+
+        return repository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
     }
 }
