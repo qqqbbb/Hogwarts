@@ -31,6 +31,16 @@ public class House
         return Objects.hash(getId(), getName());
     }
 
+    @Override
+    public String toString()
+    {
+        return "House{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
+    }
+
     public long getId()
     {
         return id;
