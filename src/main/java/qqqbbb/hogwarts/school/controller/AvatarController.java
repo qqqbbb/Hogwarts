@@ -28,10 +28,10 @@ public class AvatarController
             return ResponseEntity.badRequest().body("FIle is too big");
 
         String contentType = file.getContentType();
+        System.out.println("upload avatar contentType " + contentType);
         if (StringUtils.isBlank(contentType) || !contentType.contains("image"))
             return ResponseEntity.badRequest().body("Only images can be uploaded");
 
-//        System.out.println("uploadAvatar getContentType " + file.getContentType());
         avatarService.uploadAvatar(studentId, file);
         return ResponseEntity.ok().build();
     }
