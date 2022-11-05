@@ -1,5 +1,6 @@
 package qqqbbb.hogwarts.school.model;
 
+import org.springframework.beans.factory.annotation.Value;
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,6 +12,9 @@ public class Student
     private long id;
     private String name;
     private int age;
+
+    @Value("${path.to.avatars.folder}")
+    private String avatarsDir;
 
     @ManyToOne
     @JoinColumn(name = "house_id")
@@ -29,6 +33,17 @@ public class Student
     public int hashCode()
     {
         return Objects.hash(getId(), getName(), getAge());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", house=" + house +
+                '}';
     }
 
     public long getId()
