@@ -1,10 +1,10 @@
 package qqqbbb.hogwarts.school.model;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
+@Table(name = "Houses")
 public class House
 {
     @Id
@@ -54,6 +54,21 @@ public class House
     public String getColor()
     {
         return color;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setColor(String color)
+    {
+        this.color = color;
     }
 }
 

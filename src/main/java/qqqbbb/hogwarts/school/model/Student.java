@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Students")
 public class Student
 {
     @Id
@@ -38,7 +39,7 @@ public class Student
     @Override
     public String toString()
     {
-        return "Student{" +
+        return "{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
@@ -59,6 +60,31 @@ public class Student
     public int getAge()
     {
         return age;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+
+    public void setAvatarsDir(String avatarsDir)
+    {
+        this.avatarsDir = avatarsDir;
+    }
+
+    public void setHouse(House house)
+    {
+        this.house = house;
     }
 
 }
