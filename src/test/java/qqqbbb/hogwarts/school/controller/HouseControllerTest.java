@@ -1,5 +1,6 @@
 package qqqbbb.hogwarts.school.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.*;
@@ -9,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import qqqbbb.hogwarts.school.model.House;
+import qqqbbb.hogwarts.school.model.Student;
 import qqqbbb.hogwarts.school.repository.*;
 import qqqbbb.hogwarts.school.service.*;
 import java.util.*;
@@ -87,9 +90,7 @@ class HouseControllerTest
     public void testAddHouse() throws Exception
     {
         when(houseRepository.save(any(House.class))).thenReturn(house1);
-//        when(houseRepository.findById(any(Long.class))).thenReturn(Optional.of(house1));
-
-        mockMvc.perform(MockMvcRequestBuilders
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
                 .post("/house") //send
                 .content(house1JSONObject.toString())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -97,7 +98,11 @@ class HouseControllerTest
                 .andExpect(status().isOk()) //receive
                 .andExpect(jsonPath("$.id").value(house1id))
                 .andExpect(jsonPath("$.name").value(house1name))
-                .andExpect(jsonPath("$.color").value(house1color));
+                .andExpect(jsonPath("$.color").value(house1color))
+                .andReturn();
+//        String json = mvcResult.getResponse().getContentAsString();
+//        Student student = new ObjectMapper().readValue(json, Student.class);
+//        System.out.println("testAddHouse  ");
     }
 
     @Test
@@ -135,8 +140,9 @@ class HouseControllerTest
     {
         String url = "/house/" + house1id;
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete(url))//send
-                        .andExpect(status().isOk()); //receive
+                        .delete(url)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -172,7 +178,7 @@ class HouseControllerTest
     @Test
     void testGetHousesByColorOrName() throws Exception
     {
-        when(houseRepository.findByColorIgnoreCaseOrNameIgnoreCase(house1color, null)).thenReturn(Arrays.asList(house1));
+        when(houseRepository.findByColorIgnoreCaseOrNameIgnoreCase(any(String.class), any(String.class))).thenReturn(Arrays.asList(house1));
         String url = "/house/colorOrName/" + house1color;
         System.out.println("testGetHousesByColorOrName url " + url);
         mockMvc.perform(MockMvcRequestBuilders

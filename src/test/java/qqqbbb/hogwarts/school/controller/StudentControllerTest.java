@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -14,6 +15,8 @@ import qqqbbb.hogwarts.school.model.*;
 import qqqbbb.hogwarts.school.repository.StudentRepository;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.MethodName.class)
@@ -27,7 +30,7 @@ class StudentControllerTest
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Autowired
+    @MockBean
     private static StudentRepository studentRepository;
     static Student student1;
     static long student1id = 1;
@@ -42,61 +45,36 @@ class StudentControllerTest
     static String student3name = "student3name";
     private static final int student3age = 33;
 
-//    static House house1;
-//    static long house1id = 1;
-//    static String house1name = "house1name";
-//    static String house1color = "house1color";
-//    static House house2;
-//    static long house2id = 1;
-//    static String house2name = "house2name";
-//    static String house2color = "house2color";
-//    static House house3;
+    static List<Student> students = new ArrayList<>();
     static JSONObject student1JSONObject;
-
-    static void createStudent(Student student)
-    {
-//        studentRepository.saveAndFlush(student);
-//        System.out.println("create Student " + student.getName());
-//        System.out.println("studentRepository " + studentRepository.count());
-    }
 
     @BeforeAll
     static void setUp()
     {
-//        studentRepository.deleteAll();
-//        house1 = new House();
-//        house1.setId(house1id);
-//        house1.setName(house1name);
-//        house1.setColor(house1color);
-//        house2 = new House();
-//        house2.setId(2);
-//        house2.setName(house2name);
-//        house2.setColor(house2color);
-
         student1 = new Student();
         student1.setId(student1id);
         student1.setName(student1name);
         student1.setAge(student1age);
-//        student1.setHouse(house1);
         student2 = new Student();
         student2.setId(student2id);
         student2.setName(student2name);
         student2.setAge(student2age);
-//        student2.setHouse(house1);
         student3 = new Student();
-        student3.setId(student2id);
+        student3.setId(student3id);
         student3.setName(student3name);
         student3.setAge(student3age);
-//        student3.setHouse(house2);
+
+        students.add(student1);
+        students.add(student2);
+        students.add(student3);
 
         student1JSONObject = new JSONObject();
         student1JSONObject.put("id", student1id);
         student1JSONObject.put("name", student1name);
         student1JSONObject.put("age", student1age);
-
     }
 
-    @AfterAll
+//    @AfterAll
     public static void resetDb()
     {
         if (studentRepository == null)
@@ -108,100 +86,93 @@ class StudentControllerTest
     }
 
     @Test
-    @org.junit.jupiter.api.Order(1)
+    public void testRepo()
+    {
+        assertNotNull(studentRepository);
+    }
+
+    @Test
     public void testAddStudent() throws Exception
     {
-        assertNotNull(student1);
         String url = "http://localhost:" + port + "/student";
+        when(studentRepository.save(any(Student.class))).thenReturn(student1);
 //        String postString = restTemplate.postForObject("http://localhost:" + port + "/student", student1, String.class);
         ResponseEntity<Student> response = restTemplate.postForEntity(url, student1, Student.class);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody().getId(), student1id);
-        assertEquals(response.getBody().getName(), student1name);
-//        restTemplate.postForEntity(url, student2, Student.class);
+        assertEquals(response.getBody(), student1);
     }
 
     @Test
-//    @Order(2)
     void testGetStudent()
     {
-        assertNotNull(student1);
+        when(studentRepository.findById(any(Long.class))).thenReturn(Optional.of(student1));
         String url = "http://localhost:" + port + "/student/" + student1id;
         ResponseEntity<Student> response = restTemplate.getForEntity(url, Student.class);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody().getId(), student1id);
-        assertEquals(response.getBody().getName(), student1name);
+        assertEquals(response.getBody(), student1);
     }
 
     @Test
-//    @Order(3)
     void testEditStudent()
     {
-        assertNotNull(student1);
+        when(studentRepository.save(any(Student.class))).thenReturn(student1);
         HttpEntity<Student> entity = new HttpEntity<Student>(student1);
         String url = "http://localhost:" + port + "/student";
         ResponseEntity<Student> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Student.class);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody().getId(), student1id);
-        assertEquals(response.getBody().getName(), student1name);
+        assertEquals(response.getBody(), student1);
     }
 
-//    @Test
+    @Test
     void testDeleteStudent()
     {
-//        ResponseEntity<Student> response =  restTemplate.delete("http://localhost:" + port + "/student/1", String.class);
+//        restTemplate.postForEntity(url, student1, Student.class);
+        String url = "http://localhost:" + port + "/student/" + student1id;
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, HttpEntity.EMPTY, Void.class);
+        System.out.println("testDeleteStudent response Status " + response.getStatusCode());
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
     void testGetStudentsByAge()
     {
-        assertNotNull(student1);
-        assertNotNull(student2);
-        String postStudentUrl = "http://localhost:" + port + "/student";
-        restTemplate.postForEntity(postStudentUrl, student1, Student.class);
-        restTemplate.postForEntity(postStudentUrl, student2, Student.class);
-        String url = "http://localhost:" + port + "/student/age/" + student2age;
+        when(studentRepository.findAll()).thenReturn(new ArrayList<>(Arrays.asList(student1)));
+        String url = "http://localhost:" + port + "/student/age/" + student1age;
         ResponseEntity<List<Student>> response = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Student>>() {});
-        List<Student> students = response.getBody();
-        System.out.println("testGetStudentsByAge students list size " + students.size());
-        System.out.println("testGetStudentsByAge students list getName " + students.get(0).getName());
-        assertEquals(students.size(), 1);
-        assertEquals(students.get(0).getName(), student2name);
+        List<Student> returnedStudents = response.getBody();
+        System.out.println("testGetStudentsByAge students list size " + returnedStudents.size());
+        assertEquals(returnedStudents.size(), 1);
+        assertEquals(returnedStudents.get(0), student1);
     }
 
     @Test
     public void testGetAllStudents() throws Exception
     {
-        assertNotNull(student1);
-        assertNotNull(student2);
+        when(studentRepository.findAll()).thenReturn(students);
         String postStudentUrl = "http://localhost:" + port + "/student";
         restTemplate.postForEntity(postStudentUrl, student2, Student.class);
         String url = "http://localhost:" + port + "/student/all";
         ResponseEntity<List<Student>> response = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Student>>() {});
-        List<Student> students = response.getBody();
-        System.out.println("testGetAllStudents students list size " + students.size());
-        System.out.println("testGetAllStudents students list getName " + students.get(0).getName());
-        assertEquals(students.size(), 2);
-        assertEquals(students.get(0).getName(), student1name);
+        List<Student> returnedStudents = response.getBody();
+        System.out.println("testGetAllStudents students list size " + returnedStudents.size());
+        assertEquals(returnedStudents.size(), students.size());
+        assertTrue(returnedStudents.contains(student1));
+        assertTrue(returnedStudents.contains(student2));
+        assertTrue(returnedStudents.contains(student3));
     }
 
     @Test
     void testGetStudentsByAgeBetween()
     {
-        assertNotNull(student1);
-        assertNotNull(student2);
-        String postStudentUrl = "http://localhost:" + port + "/student";
-        restTemplate.postForEntity(postStudentUrl, student1, Student.class);
-        restTemplate.postForEntity(postStudentUrl, student2, Student.class);
+        when(studentRepository.findByAgeBetween(any(Integer.class), any(Integer.class))).thenReturn(new ArrayList<>(Arrays.asList(student1)));
         String url = "http://localhost:" + port + "/student/ageBetween/"  + 10 + '&' + 20;
         ResponseEntity<List<Student>> response = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Student>>() {});
         List<Student> students = response.getBody();
         System.out.println("testGetStudentsByAgeBetween students list size " + students.size());
-        System.out.println("testGetStudentsByAgeBetween students list getName " + students.get(0).getName());
         assertEquals(students.size(), 1);
-        assertEquals(students.get(0).getName(), student1name);
+        assertEquals(students.get(0), student1);
     }
 }
