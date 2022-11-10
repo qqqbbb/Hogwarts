@@ -1,9 +1,8 @@
 package qqqbbb.hogwarts.school.repository;
 
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import qqqbbb.hogwarts.school.model.Avatar;
-import qqqbbb.hogwarts.school.model.Student;
-
 import java.util.Optional;
 
 public interface AvatarRepository extends JpaRepository<Avatar, Long>
@@ -12,4 +11,5 @@ public interface AvatarRepository extends JpaRepository<Avatar, Long>
 
     void deleteByStudent_Id(Long studentId);
 
+    Page<Avatar> findAll(Pageable pageable);
 }
