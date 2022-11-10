@@ -1,6 +1,8 @@
 package qqqbbb.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +12,8 @@ import qqqbbb.hogwarts.school.repository.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -82,5 +86,14 @@ public class AvatarService
     private String getFileNameExtension(String fileName)
     {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    public List<Avatar> getAl(Pageable paging)
+    {
+        Page<Avatar> pagedResult = avatarRepository.findAll(paging);
+        if(pagedResult.hasContent())
+            return pagedResult.getContent();
+         else
+            return new ArrayList<Avatar>();
     }
 }

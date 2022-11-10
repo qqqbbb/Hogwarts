@@ -71,4 +71,19 @@ public class StudentService
         student.setAvatarsDir(avatar.getFilePath());
         return repository.save(student);
     }
+
+    public int countStudents()
+    {
+        return repository.countStudents();
+    }
+
+    public int getStudentsAverageAge()
+    {
+        return repository.getAverageAge();
+    }
+
+    public  Collection<Student> getLast5Students()
+    {
+        return repository.getLast5Students();
+    }
 }

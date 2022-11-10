@@ -71,4 +71,22 @@ public class StudentController
     {
         return ResponseEntity.ok(studentService.patchStudentAvatar(studemtId, avatarId));
     }
+
+    @GetMapping("/count")
+    public ResponseEntity countStudents()
+    {
+        return ResponseEntity.ok(studentService.countStudents());
+    }
+
+    @GetMapping("/averageAge")
+    public ResponseEntity getStudentsAverageAge()
+    {
+        return ResponseEntity.ok(studentService.getStudentsAverageAge());
+    }
+
+    @GetMapping("/last5")
+    public ResponseEntity getLast5Students()
+    {
+        return ResponseEntity.ok(studentService.getLast5Students());
+    }
 }
