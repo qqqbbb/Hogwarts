@@ -29,8 +29,8 @@ public class AvatarController
 
         String contentType = file.getContentType();
         System.out.println("upload avatar contentType " + contentType);
-        if (StringUtils.isBlank(contentType) || !contentType.contains("image"))
-            return ResponseEntity.badRequest().body("Only images can be uploaded");
+//        if (StringUtils.isBlank(contentType) || !contentType.contains("image"))
+//            return ResponseEntity.badRequest().body("Only images can be uploaded");
 
         avatarService.uploadAvatar(studentId, file);
         return ResponseEntity.ok().build();

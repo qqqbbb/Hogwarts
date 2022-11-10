@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class Avatar {
+@Table(name = "Avatars")
+public class Avatar
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

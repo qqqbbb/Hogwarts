@@ -46,6 +46,7 @@ public class HouseController
     @GetMapping("/color/{color}")
     public ResponseEntity getHousesByColor(@PathVariable String color)
     {
+        System.out.println("c getHousesByColor " + color);
         List<House> houses = houseService.getHousesByColor(color);
         return ResponseEntity.ok(houses);
     }
@@ -60,6 +61,8 @@ public class HouseController
     @GetMapping("/colorOrName/{var}")
     public ResponseEntity getHousesByColorOrName(@RequestParam(required = false) String color, @RequestParam(required = false) String name)
     {
+        System.out.println("c getHousesByColorOrName color " + color);
+        System.out.println("c getHousesByColorOrName name " + name);
         Collection<House> houses = houseService.getHousesByColorOrName(color, name);
         return ResponseEntity.ok(houses);
     }

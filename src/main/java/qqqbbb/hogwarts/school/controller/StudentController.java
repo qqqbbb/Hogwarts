@@ -21,7 +21,9 @@ public class StudentController
     @PostMapping
     public ResponseEntity addStudent(@RequestBody Student student)
     {
-        return ResponseEntity.ok(studentService.addStudent(student));
+        Student returnedStudent = studentService.addStudent(student);
+        System.out.println("returnedStudent " + returnedStudent);
+        return ResponseEntity.ok(returnedStudent);
     }
 
     @GetMapping("{id}")
@@ -64,4 +66,9 @@ public class StudentController
         return ResponseEntity.ok(students);
     }
 
+    @PatchMapping ("/avater/{studemtId}&{avatarId}")
+    public ResponseEntity patchStudentAvatar(@PathVariable long studemtId, @PathVariable long avatarId)
+    {
+        return ResponseEntity.ok(studentService.patchStudentAvatar(studemtId, avatarId));
+    }
 }
