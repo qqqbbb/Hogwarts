@@ -9,4 +9,10 @@ public interface HouseRepository extends JpaRepository<House, Long>
 {
 
     Collection<House> findByColorIgnoreCaseOrNameIgnoreCase(String color, String name);
+
+    Collection<House> findByColorIgnoreCase(String color);
+
+    Collection<House> findByNameIgnoreCase(String name);
+
+
 }

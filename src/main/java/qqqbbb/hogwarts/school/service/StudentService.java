@@ -33,6 +33,7 @@ public class StudentService
 
     public Student editStudent(Student student)
     {
+        getStudent(student.getId());
         return repository.save(student);
     }
 

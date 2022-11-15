@@ -49,7 +49,6 @@ class HouseControllerTest
     private HouseController houseController;
 
     static JSONObject house1JSONObject;
-    static JSONObject house2JSONObject;
     static House house1;
     static long house1id = 1L;
     static String house1name = "House1name";
@@ -73,10 +72,6 @@ class HouseControllerTest
         house1.setName(house1name);
         house1.setColor(house1color);
 
-        house2JSONObject = new JSONObject();
-        house2JSONObject.put("id", house2id);
-        house2JSONObject.put("name", house2name);
-        house2JSONObject.put("color", house2color);
         house2 = new House();
         house2.setId(house2id);
         house2.setName(house2name);
@@ -101,8 +96,8 @@ class HouseControllerTest
                 .andExpect(jsonPath("$.color").value(house1color))
                 .andReturn();
 //        String json = mvcResult.getResponse().getContentAsString();
-//        Student student = new ObjectMapper().readValue(json, Student.class);
-//        System.out.println("testAddHouse  ");
+//        House house = new ObjectMapper().readValue(json, House.class);
+//        System.out.println("testAddHouse  " + house);
     }
 
     @Test
@@ -123,7 +118,6 @@ class HouseControllerTest
     void testEditHouse() throws Exception
     {
         when(houseRepository.save(any(House.class))).thenReturn(house1);
-
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/house") //send
                 .content(house1JSONObject.toString())
@@ -178,7 +172,7 @@ class HouseControllerTest
     @Test
     void testGetHousesByColorOrName() throws Exception
     {
-        when(houseRepository.findByColorIgnoreCaseOrNameIgnoreCase(any(String.class), any(String.class))).thenReturn(Arrays.asList(house1));
+        when(houseRepository.findByColorIgnoreCase(any(String.class))).thenReturn(Arrays.asList(house1));
         String url = "/house/colorOrName/" + house1color;
         System.out.println("testGetHousesByColorOrName url " + url);
         mockMvc.perform(MockMvcRequestBuilders

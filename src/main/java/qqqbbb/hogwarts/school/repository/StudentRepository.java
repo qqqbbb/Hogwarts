@@ -17,4 +17,5 @@ public interface StudentRepository extends JpaRepository <Student, Long>
 
     @Query(value = "SELECT * FROM students order by id desc limit 5; ", nativeQuery = true)
     Collection<Student> getLast5Students();
+
 }

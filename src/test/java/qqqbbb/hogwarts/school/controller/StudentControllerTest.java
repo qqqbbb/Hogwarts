@@ -92,7 +92,7 @@ class StudentControllerTest
     }
 
     @Test
-    public void testAddStudent() throws Exception
+    public void testAddStudent()
     {
         String url = "http://localhost:" + port + "/student";
         when(studentRepository.save(any(Student.class))).thenReturn(student1);
@@ -141,13 +141,13 @@ class StudentControllerTest
         ResponseEntity<List<Student>> response = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Student>>() {});
         List<Student> returnedStudents = response.getBody();
-        System.out.println("testGetStudentsByAge students list size " + returnedStudents.size());
+//        System.out.println("testGetStudentsByAge students list size " + returnedStudents.size());
         assertEquals(returnedStudents.size(), 1);
         assertEquals(returnedStudents.get(0), student1);
     }
 
     @Test
-    public void testGetAllStudents() throws Exception
+    public void testGetAllStudents()
     {
         when(studentRepository.findAll()).thenReturn(students);
         String postStudentUrl = "http://localhost:" + port + "/student";
@@ -171,7 +171,7 @@ class StudentControllerTest
         ResponseEntity<List<Student>> response = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Student>>() {});
         List<Student> students = response.getBody();
-        System.out.println("testGetStudentsByAgeBetween students list size " + students.size());
+//        System.out.println("testGetStudentsByAgeBetween students list size " + students.size());
         assertEquals(students.size(), 1);
         assertEquals(students.get(0), student1);
     }

@@ -88,7 +88,7 @@ public class AvatarService
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    public List<Avatar> getAl(Pageable paging)
+    public List<Avatar> getAll(Pageable paging)
     {
         Page<Avatar> pagedResult = avatarRepository.findAll(paging);
         if(pagedResult.hasContent())
