@@ -1,7 +1,6 @@
 package qqqbbb.hogwarts.school.controller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
@@ -11,7 +10,6 @@ import qqqbbb.hogwarts.school.model.Avatar;
 import qqqbbb.hogwarts.school.service.AvatarService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.*;
 import java.util.List;
 
 @RestController
@@ -54,10 +52,10 @@ public class AvatarController
 
     @GetMapping("all")
     public ResponseEntity<List<Avatar>> getAllAvatars(
-            @RequestParam(defaultValue = "0") Integer pageNo,
-            @RequestParam(defaultValue = "10") Integer pageSize)
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize)
     {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        return new ResponseEntity<>(avatarService.getAl(pageable), HttpStatus.OK);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return new ResponseEntity<>(avatarService.getAll(pageable), HttpStatus.OK);
     }
 }

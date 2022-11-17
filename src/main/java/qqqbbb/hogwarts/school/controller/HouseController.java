@@ -1,5 +1,6 @@
 package qqqbbb.hogwarts.school.controller;
 
+import org.apache.catalina.filters.AddDefaultCharsetFilter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import qqqbbb.hogwarts.school.model.House;
@@ -27,6 +28,7 @@ public class HouseController
     @GetMapping("{id}")
     public ResponseEntity getHouse(@PathVariable Long id)
     {
+        System.out.println("c getHouse " + id);
         return ResponseEntity.ok(houseService.getHouse(id));
     }
 
@@ -58,12 +60,11 @@ public class HouseController
         return ResponseEntity.ok(houses);
     }
 
-    @GetMapping("/colorOrName/{var}")
-    public ResponseEntity getHousesByColorOrName(@RequestParam(required = false) String color, @RequestParam(required = false) String name)
+    @GetMapping("/colorOrName/{colorOrName}")
+    public ResponseEntity getHousesByColorOrName(@PathVariable String colorOrName)
     {
-        System.out.println("c getHousesByColorOrName color " + color);
-        System.out.println("c getHousesByColorOrName name " + name);
-        Collection<House> houses = houseService.getHousesByColorOrName(color, name);
+        System.out.println("c getHousesByColorOrName color " + colorOrName);
+        Collection<House> houses = houseService.getHousesByColorOrName(colorOrName);
         return ResponseEntity.ok(houses);
     }
 }

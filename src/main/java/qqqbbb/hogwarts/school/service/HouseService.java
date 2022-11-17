@@ -30,6 +30,7 @@ public class HouseService
 
     public House editHouse(House house)
     {
+        getHouse(house.getId());
         return repository.save(house);
     }
 
@@ -48,11 +49,12 @@ public class HouseService
         return repository.findAll().stream().filter(h -> h.getColor().equals(color)).collect(Collectors.toList());
     }
 
-    public  Collection<House> getHousesByColorOrName(String color, String name)
+    public  Collection<House> getHousesByColorOrName(String colorOrName)
     {
-        if (StringUtils.isBlank(color) && StringUtils.isBlank(name))
-            throw new IllegalArgumentException();
+        Collection<House> houses = repository.findByColorIgnoreCase(colorOrName);
+        if (houses.size() > 0)
+            return houses;
 
-        return repository.findByColorIgnoreCaseOrNameIgnoreCase(color, name);
+        return repository.findByNameIgnoreCase(colorOrName);
     }
 }
