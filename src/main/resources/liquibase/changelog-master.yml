@@ -1,0 +1,5 @@
+databaseChangeLog:
+#  - includeAll:
+#      path: classpath*:db/changelog/changes/
+ - include:
+    file: liquibase/scripts/homework4dot3.sql
