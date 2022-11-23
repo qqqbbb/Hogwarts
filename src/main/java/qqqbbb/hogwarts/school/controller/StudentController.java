@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import qqqbbb.hogwarts.school.model.*;
 import qqqbbb.hogwarts.school.service.StudentService;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequestMapping("student")
 @RestController
@@ -66,16 +65,22 @@ public class StudentController
         return ResponseEntity.ok(students);
     }
 
-    @PatchMapping ("/avater/{studemtId}&{avatarId}")
-    public ResponseEntity patchStudentAvatar(@PathVariable long studemtId, @PathVariable long avatarId)
+    @PatchMapping ("/avatar/{studentId}&{avatarId}")
+    public ResponseEntity patchStudentAvatar(@PathVariable long studentId, @PathVariable long avatarId)
     {
-        return ResponseEntity.ok(studentService.patchStudentAvatar(studemtId, avatarId));
+        return ResponseEntity.ok(studentService.patchStudentAvatar(studentId, avatarId));
     }
 
     @GetMapping("/count")
     public ResponseEntity countStudents()
     {
         return ResponseEntity.ok(studentService.countStudents());
+    }
+
+    @GetMapping("/averageAgeSQL")
+    public ResponseEntity getStudentsAverageAgeSQL()
+    {
+        return ResponseEntity.ok(studentService.getStudentsAverageAgeSQL());
     }
 
     @GetMapping("/averageAge")
@@ -89,4 +94,11 @@ public class StudentController
     {
         return ResponseEntity.ok(studentService.getLast5Students());
     }
+
+    @GetMapping("/nameStartWith/{name}")
+    public ResponseEntity getNamesStartWith(@PathVariable String name)
+    {
+        return ResponseEntity.ok(studentService.getNamesStartWith(name));
+    }
+
 }

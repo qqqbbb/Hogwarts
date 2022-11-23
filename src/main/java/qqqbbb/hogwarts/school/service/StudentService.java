@@ -87,10 +87,16 @@ public class StudentService
         return repository.countStudents();
     }
 
-    public int getStudentsAverageAge()
+    public int getStudentsAverageAgeSQL()
+    {
+        logger.info("getStudentsAverageAgeSQL ");
+        return repository.getAverageAge();
+    }
+
+    public double getStudentsAverageAge()
     {
         logger.info("getStudentsAverageAge ");
-        return repository.getAverageAge();
+        return repository.findAll().stream().mapToInt(Student::getAge).average().orElseThrow(StudentNotFoundException::new);
     }
 
     public  Collection<Student> getLast5Students()
@@ -98,4 +104,11 @@ public class StudentService
         logger.info("getLast5Students ");
         return repository.getLast5Students();
     }
+
+    public List<String> getNamesStartWith(String name)
+    {
+        logger.info("getNamesStartWith " + name);
+        return repository.findAll().stream().map(Student::getName).filter(n -> n.startsWith(name)).collect(Collectors.toList());
+    }
+
 }

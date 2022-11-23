@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import qqqbbb.hogwarts.school.Exception.*;
 import qqqbbb.hogwarts.school.model.House;
 import qqqbbb.hogwarts.school.repository.HouseRepository;
+
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -65,5 +67,15 @@ public class HouseService
             return houses;
 
         return repository.findByNameIgnoreCase(colorOrName);
+    }
+
+    public String getLongestName()
+    {
+        logger.info("getLongestName ");
+        Optional optional = repository.findAll().stream().map(House::getName).max(Comparator.comparingInt(String::length));
+        if (optional.isEmpty())
+            throw new HouseNotFoundException();
+
+        return (String)optional.get();
     }
 }

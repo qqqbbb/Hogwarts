@@ -67,4 +67,10 @@ public class HouseController
         Collection<House> houses = houseService.getHousesByColorOrName(colorOrName);
         return ResponseEntity.ok(houses);
     }
+
+    @GetMapping("/longestName")
+    public ResponseEntity getLongestName()
+    {
+        return ResponseEntity.ok(houseService.getLongestName());
+    }
 }
