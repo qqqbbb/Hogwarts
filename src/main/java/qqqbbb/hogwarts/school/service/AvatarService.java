@@ -1,8 +1,8 @@
 package qqqbbb.hogwarts.school.service;
 
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,15 +12,14 @@ import qqqbbb.hogwarts.school.repository.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 //@Transactional
 public class AvatarService
 {
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
     private final StudentService studentService;
     private final AvatarRepository avatarRepository;
     @Value("${path.to.avatars.folder}")
@@ -33,6 +32,7 @@ public class AvatarService
     }
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException
     {
+        logger.info("uploadAvatar " + studentId);
         Student student = studentService.getStudent(studentId);
         Path filePath = Path.of(avatarsDir, student + "." + getFileNameExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -56,12 +56,14 @@ public class AvatarService
 
     public Avatar getAvatar(Long studentId)
     {
+        logger.info("getAvatar " + studentId);
         Optional<Avatar> optionalAvatar = avatarRepository.findByStudentId(studentId);
         return optionalAvatar.orElseThrow(AvatarNotFoundException::new);
     }
 
     public ResponseEntity<byte[]> downloadAvatarFromDB(Long studentId)
     {
+        logger.info("downloadAvatarFromDB " + studentId);
         Avatar avatar = getAvatar(studentId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
@@ -71,6 +73,7 @@ public class AvatarService
 
     public void downloadAvatarFromFile(long studentId, HttpServletResponse response) throws IOException
     {
+        logger.info("downloadAvatarFromFile " + studentId);
         Avatar avatar = getAvatar(studentId);
         Path path = Path.of(avatar.getFilePath());
         try(InputStream is = Files.newInputStream(path);
@@ -90,6 +93,7 @@ public class AvatarService
 
     public List<Avatar> getAll(Pageable paging)
     {
+        logger.info("getAll ");
         Page<Avatar> pagedResult = avatarRepository.findAll(paging);
         if(pagedResult.hasContent())
             return pagedResult.getContent();

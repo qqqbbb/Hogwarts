@@ -28,7 +28,7 @@ public class HouseController
     @GetMapping("{id}")
     public ResponseEntity getHouse(@PathVariable Long id)
     {
-        System.out.println("c getHouse " + id);
+//        System.out.println("c getHouse " + id);
         return ResponseEntity.ok(houseService.getHouse(id));
     }
 
@@ -48,7 +48,7 @@ public class HouseController
     @GetMapping("/color/{color}")
     public ResponseEntity getHousesByColor(@PathVariable String color)
     {
-        System.out.println("c getHousesByColor " + color);
+//        System.out.println("c getHousesByColor " + color);
         List<House> houses = houseService.getHousesByColor(color);
         return ResponseEntity.ok(houses);
     }
@@ -63,8 +63,14 @@ public class HouseController
     @GetMapping("/colorOrName/{colorOrName}")
     public ResponseEntity getHousesByColorOrName(@PathVariable String colorOrName)
     {
-        System.out.println("c getHousesByColorOrName color " + colorOrName);
+//        System.out.println("c getHousesByColorOrName color " + colorOrName);
         Collection<House> houses = houseService.getHousesByColorOrName(colorOrName);
         return ResponseEntity.ok(houses);
+    }
+
+    @GetMapping("/longestName")
+    public ResponseEntity getLongestName()
+    {
+        return ResponseEntity.ok(houseService.getLongestName());
     }
 }
