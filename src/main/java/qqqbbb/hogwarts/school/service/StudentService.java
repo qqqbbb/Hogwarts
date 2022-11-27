@@ -3,6 +3,7 @@ package qqqbbb.hogwarts.school.service;
 import org.slf4j.*;
 import org.springframework.stereotype.Service;
 import qqqbbb.hogwarts.school.Exception.*;
+import qqqbbb.hogwarts.school.PrinterThread;
 import qqqbbb.hogwarts.school.model.*;
 import qqqbbb.hogwarts.school.repository.*;
 import java.util.*;
@@ -111,4 +112,38 @@ public class StudentService
         return repository.findAll().stream().map(Student::getName).filter(n -> n.startsWith(name)).collect(Collectors.toList());
     }
 
+    public void printNames(Boolean sync)
+    {
+        logger.info("printNames sync " + sync);
+        List<String> names = repository.findAll().stream().map(Student::getName).toList();
+        PrinterThread thread1 = new PrinterThread();
+        PrinterThread thread2 = new PrinterThread();
+        thread1.setStrings(names.subList(2, 4));
+        thread2.setStrings(names.subList(4, 6));
+        if (sync)
+        {
+            thread1.setSyncObj(this);
+            thread2.setSyncObj(this);
+            thread1.setPriority(10);
+        }
+        for (int i = 0; i <= 1; i++)
+        {
+            String name = names.get(i);
+            if (name == null || name.isEmpty())
+                continue;
+
+            System.out.println("main thread " + name );
+        }
+        thread1.start();
+        thread2.start();
+
+        for (int i = 6; i < names.size(); i++)
+        {
+            String name = names.get(i);
+            if (name == null || name.isEmpty())
+                continue;
+
+            System.out.println("main thread " + name );
+        }
+    }
 }
