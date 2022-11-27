@@ -101,4 +101,16 @@ public class StudentController
         return ResponseEntity.ok(studentService.getNamesStartWith(name));
     }
 
+    @GetMapping("/printNames")
+    public void printNames()
+    {
+        studentService.printNames(false);
+    }
+
+    @GetMapping("/printNamesSync")
+    public void printNamesSync()
+    {
+        studentService.printNames(true);
+    }
+
 }
